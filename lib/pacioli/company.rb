@@ -45,5 +45,15 @@ module Pacioli
       self.accounts << account
       account
     end
+
+    # record_journal_entry do
+    #   description: "Invoice Bob for November Rent"
+    #   source_document: InvoiceInstance
+    #   subsidiary_ledger: CustomerAccount
+    #   posting_references do 
+    #     debit(AccountReceivable, amount: amount)
+    #     credit(SalesAccount, amount: amount)
+    #   end
+    # end
   end
 end

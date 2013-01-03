@@ -12,6 +12,7 @@ module Pacioli
     company.save!
     company
   end
+
 end
 
 require "pacioli/company"
