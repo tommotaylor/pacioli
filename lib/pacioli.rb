@@ -15,3 +15,9 @@ module Pacioli
 end
 
 require "pacioli/company"
+require "pacioli/account"
+require "pacioli/asset_account"
+require "pacioli/liability_account"
+require "pacioli/equity_account"
+require "pacioli/income_account"
+require "pacioli/expense_account"

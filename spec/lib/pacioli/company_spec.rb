@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'ostruct'
 
 describe Pacioli::Company do 
   include Helpers
