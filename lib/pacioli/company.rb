@@ -4,6 +4,7 @@ module Pacioli
     has_many :accounts, foreign_key: :pacioli_company_id, dependent: :destroy
     has_many :chart_of_accounts, through: :accounts
     has_many :journal_entries, foreign_key: :pacioli_company_id, dependent: :destroy
+    has_many :posting_rules, foreign_key: :pacioli_company_id, dependent: :destroy
 
     def self.for(company)
       Company.where(companyable_type: company.class.name, companyable_id: company.id).first || Company.create!(companyable_type: company.class.name, companyable_id: company.id)
@@ -48,12 +49,27 @@ module Pacioli
     end
 
     def record_journal_entry(&block)
-      journal_entry = JournalEntry.new
-      self.journal_entries << journal_entry
-      
-      journal_entry.instance_eval(&block)
-      journal_entry.save!
-      journal_entry
+      self.transaction do
+        journal_entry = JournalEntry.new
+        self.journal_entries << journal_entry
+        journal_entry.instance_eval(&block)
+
+        JournalEntryValidator.for(journal_entry).execute
+
+        journal_entry.amount = journal_entry.calculate_amount if journal_entry.amount.blank?
+        journal_entry.save!
+        journal_entry
+      end
+    end
+
+    def create_posting_rule(&block)
+      self.transaction do
+        posting_rule = PostingRule.new
+        self.posting_rules << posting_rule
+        posting_rule.instance_eval(&block)
+        posting_rule.save!
+        posting_rule
+      end
     end
 
     # create_posting_rule_with_journal_entry :x do

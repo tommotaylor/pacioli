@@ -7,6 +7,10 @@ module Pacioli
       self.description = desc
     end
 
+    def with_amount(amt)
+      self.amount = amt
+    end
+
     def debit(options={})
       account = self.company.accounts.where(name: options[:account]).first
       self.transactions << Debit.new(journal_entry: self, account: account, amount: options[:amount])
@@ -27,6 +31,10 @@ module Pacioli
 
     def credits
       transactions.where(type: 'Pacioli::Credit')
+    end
+
+    def calculate_amount
+      credits.sum(&:amount)
     end
   end
 end

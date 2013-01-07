@@ -37,6 +37,59 @@ describe Pacioli::Account do
     it "should balance" do
       Pacioli::JournalEntry.last.should be_balanced
     end
+
+    it "should record the amount of 4500.00 for the journal entry" do
+      Pacioli::JournalEntry.last.amount.should == 4500.00 
+    end
+  end
+
+  context "Recording a journal entry where the T-tables do not balance" do
+    it "should raise an AccountsNotBalancedException error" do
+      lambda {
+        @company.record_journal_entry do
+          with_description "Invoice 123 for November Rent"
+          debit account: "Accounts Receivable", amount: 4500.00
+        end
+      }.should raise_error(Pacioli::AccountsNotBalancedException, "The aggregate balance of all accounts having positive balances must be equal to the aggregate balance of all accounts having negative balances.")
+      
+      Pacioli::JournalEntry.all.should be_blank
+    end
+  end
+
+  context "Recording specific types of journal entries using posting rules" do
+
+    context "Against 2 accounts" do
+      before(:each) do
+        @company.create_posting_rule do
+          with_name :sale
+          debit "Accounts Receivable"
+          credit "Sales"
+        end
+
+        @company.record_journal_entry do
+          with_amount 5000.00
+          with_description "Invoice 123 for November Rent"
+          type :sale
+        end
+      end
+
+      it "should create a debit transaction against the Accounts Receivable account for 5000.00" do
+
+      end
+
+      it "should create a credit transaction against the Sales account for 5000.00" do
+
+      end
+    end
+
+    context "Against multiple accounts" do
+
+    end
+
+    context "Against multiple accounts and a percentage of an amount" do
+
+    end
+
   end
   
 end
