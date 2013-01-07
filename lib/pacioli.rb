@@ -28,4 +28,6 @@ require "pacioli/credit"
 require "pacioli/debit"
 require "pacioli/posting_rule"
 require "pacioli/exception"
+
 require "pacioli/validations/journal_entry_validator"
+require "pacioli/validations/posting_rule_validator"

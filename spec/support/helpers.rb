@@ -4,6 +4,7 @@ module Helpers
     Pacioli::Account.delete_all
     Pacioli::JournalEntry.delete_all
     Pacioli::Transaction.delete_all
+    Pacioli::PostingRule.destroy_all
   end
 end                                                                                                                                   
         

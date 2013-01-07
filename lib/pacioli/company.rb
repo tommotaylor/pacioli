@@ -55,7 +55,7 @@ module Pacioli
         journal_entry.instance_eval(&block)
 
         journal_entry.execute_posting_rules
-        
+
         JournalEntryValidator.for(journal_entry).execute
 
         journal_entry.amount = journal_entry.calculate_amount if journal_entry.amount.blank?
@@ -69,6 +69,9 @@ module Pacioli
         posting_rule = PostingRule.new
         self.posting_rules << posting_rule
         posting_rule.instance_eval(&block)
+
+        PostingRuleValidator.for(posting_rule).execute
+
         posting_rule.save!
         posting_rule
       end

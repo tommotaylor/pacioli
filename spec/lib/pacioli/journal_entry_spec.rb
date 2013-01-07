@@ -10,6 +10,7 @@ describe Pacioli::Account do
       with_name "Coca-Cola"
       add_asset_account name: "Accounts Receivable", code: "100"
       add_income_account name: "Sales", code: "301"
+      add_liability_account name: "Sales Tax", code: "401"
     end
   end
 
@@ -57,26 +58,6 @@ describe Pacioli::Account do
   end
 
   context "Recording specific types of journal entries using posting rules" do
-
-    it "should be able to create a posting rule" do
-      posting_rule = @company.create_posting_rule do
-        with_name :sale
-        debit "Accounts Receivable"
-        credit "Sales"
-      end
-
-      posting_rule.rules.should == {
-        credits: [
-          {account: "Sales", percentage: 100}
-        ],
-        debits: [
-          {account: "Accounts Receivable", percentage: 100}
-        ]
-      }
-
-      posting_rule.name.should == :sale
-    end
-
     context "Against 2 accounts" do
       before(:each) do
         @company.create_posting_rule do
@@ -108,7 +89,28 @@ describe Pacioli::Account do
     end
 
     context "Against multiple accounts" do
+      before(:each) do
+        @company.create_posting_rule do
+          with_name :sale
+          debit "Accounts Receivable"
+          credit "Sales", percentage: 86
+          credit "Sales Tax", percentage: 14
+        end
 
+        @sales = @company.record_journal_entry do
+          with_amount 100.00
+          with_description "Invoice 123 for November Rent"
+          type :sale
+        end
+      end
+
+      it "should create a credit transaction against Sales for 86.00 and Sales Taxes for 14.00" do
+        @sales.credits.map(&:amount).should == [BigDecimal('86.00'), BigDecimal('14.00')]
+      end
+
+      it "should create a debit transaction against Accounts Receivable" do
+        @sales.debits.map(&:amount).should == [BigDecimal('100.00')]
+      end
     end
 
     context "Against multiple accounts and a percentage of an amount" do

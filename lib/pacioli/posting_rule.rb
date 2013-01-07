@@ -27,7 +27,16 @@ module Pacioli
     end
 
     def build(journal_entry)
-      
+
+    end
+
+    def balanced?
+      self.rules[:credits].inject(0) { |sum, cr| sum += cr[:percentage] } == self.rules[:debits].inject(0) { |sum, dr| sum += dr[:percentage] }
+    end
+
+    def whole?
+      self.rules[:credits].inject(0) { |sum, cr| sum += cr[:percentage] } == 100 && 
+      self.rules[:debits].inject(0) { |sum, dr| sum += dr[:percentage] } == 100
     end
 
   end
