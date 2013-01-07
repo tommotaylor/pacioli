@@ -19,7 +19,7 @@ ActiveRecord::Schema.define do
   end
 
   create_table :pacioli_journal_entries, :force => true do |t|
-    t.string :type
+    t.string :journal_type
     t.string :description
     t.references :pacioli_company
     t.decimal :amount, :precision => 20, :scale => 10

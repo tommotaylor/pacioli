@@ -54,6 +54,8 @@ module Pacioli
         self.journal_entries << journal_entry
         journal_entry.instance_eval(&block)
 
+        journal_entry.execute_posting_rules
+        
         JournalEntryValidator.for(journal_entry).execute
 
         journal_entry.amount = journal_entry.calculate_amount if journal_entry.amount.blank?

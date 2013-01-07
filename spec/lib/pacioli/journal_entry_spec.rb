@@ -58,6 +58,25 @@ describe Pacioli::Account do
 
   context "Recording specific types of journal entries using posting rules" do
 
+    it "should be able to create a posting rule" do
+      posting_rule = @company.create_posting_rule do
+        with_name :sale
+        debit "Accounts Receivable"
+        credit "Sales"
+      end
+
+      posting_rule.rules.should == {
+        credits: [
+          {account: "Sales", percentage: 100}
+        ],
+        debits: [
+          {account: "Accounts Receivable", percentage: 100}
+        ]
+      }
+
+      posting_rule.name.should == :sale
+    end
+
     context "Against 2 accounts" do
       before(:each) do
         @company.create_posting_rule do
@@ -66,7 +85,7 @@ describe Pacioli::Account do
           credit "Sales"
         end
 
-        @company.record_journal_entry do
+        @sales = @company.record_journal_entry do
           with_amount 5000.00
           with_description "Invoice 123 for November Rent"
           type :sale
@@ -74,11 +93,17 @@ describe Pacioli::Account do
       end
 
       it "should create a debit transaction against the Accounts Receivable account for 5000.00" do
-
+        account = @company.accounts.where(name: "Accounts Receivable").first
+        account.transactions.count.should == 1
       end
 
       it "should create a credit transaction against the Sales account for 5000.00" do
+        account = @company.accounts.where(name: "Sales").first
+        account.transactions.count.should == 1
+      end
 
+      it "should be balanced" do 
+        @sales.should be_balanced
       end
     end
 
