@@ -16,14 +16,14 @@ describe Pacioli::Account do
   context "Recording a journal entry" do
     before(:each) do
       @company.record_journal_entry do
-        description "Invoice 123 for November Rent"
+        with_description "Invoice 123 for November Rent"
         debit account: "Accounts Receivable", amount: 4500.00
         credit account: "Sales", amount: 4500.00
       end
     end
 
     it "should record a journal entry" do
-      
+      Pacioli::JournalEntry.all.count.should == 1
     end
 
     it "should record 1 transaction against Accounts Receivable Account" do

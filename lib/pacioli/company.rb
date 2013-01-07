@@ -46,14 +46,27 @@ module Pacioli
       account
     end
 
+    def record_journal_entry(&block)
+      journal_entry = JournalEntry.new
+      journal_entry.instance_eval(&block)
+      journal_entry.save!
+      journal_entry
+    end
+
+    # create_posting_rule_with_journal_entry :x do
+    #   debit AccountsReceivable 100%
+    #   credit Sales 100%
+    #   record_against_customer CustomerAccount
+    #   with_description Description
+    #   with_source_document SourceDocument
+    # end
+
     # record_journal_entry do
+    #   type :x
     #   description: "Invoice Bob for November Rent"
     #   source_document: InvoiceInstance
     #   subsidiary_ledger: CustomerAccount
-    #   posting_references do 
-    #     debit(AccountReceivable, amount: amount)
-    #     credit(SalesAccount, amount: amount)
-    #   end
     # end
+
   end
 end
