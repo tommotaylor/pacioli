@@ -1,5 +1,5 @@
 module Pacioli
-  class Credit < JournalEntry
+  class Credit < Transaction
 
   end
 end

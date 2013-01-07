@@ -27,11 +27,11 @@ describe Pacioli::Account do
     end
 
     it "should record 1 transaction against Accounts Receivable Account" do
-    
+      @company.accounts.where(name: "Accounts Receivable").first.transactions.count.should == 1
     end
 
     it "should have recorded 1 transaction against the Sales Account" do
-
+      @company.accounts.where(name: "Sales").first.transactions.count.should == 1
     end
   end
   

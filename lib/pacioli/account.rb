@@ -1,5 +1,7 @@
 module Pacioli
   class Account < ActiveRecord::Base
+    has_many :transactions, foreign_key: :pacioli_account_id
+
     def asset?
       false
     end

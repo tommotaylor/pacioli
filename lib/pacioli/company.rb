@@ -3,6 +3,7 @@ module Pacioli
     belongs_to :companyable, polymorphic: true
     has_many :accounts, foreign_key: :pacioli_company_id, dependent: :destroy
     has_many :chart_of_accounts, through: :accounts
+    has_many :journal_entries, foreign_key: :pacioli_company_id, dependent: :destroy
 
     def self.for(company)
       Company.where(companyable_type: company.class.name, companyable_id: company.id).first || Company.create!(companyable_type: company.class.name, companyable_id: company.id)
@@ -48,6 +49,8 @@ module Pacioli
 
     def record_journal_entry(&block)
       journal_entry = JournalEntry.new
+      self.journal_entries << journal_entry
+      
       journal_entry.instance_eval(&block)
       journal_entry.save!
       journal_entry
