@@ -33,6 +33,10 @@ describe Pacioli::Account do
     it "should have recorded 1 transaction against the Sales Account" do
       @company.accounts.where(name: "Sales").first.transactions.count.should == 1
     end
+
+    it "should balance" do
+      Pacioli::JournalEntry.last.should be_balanced
+    end
   end
   
 end
