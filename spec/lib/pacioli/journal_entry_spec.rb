@@ -150,17 +150,5 @@ describe Pacioli::Account do
         @sales.debits.map(&:amount).should == [BigDecimal('100.00')]
       end
     end
-
-  end
-  
+  end  
 end
-
-# record_journal_entry do
-    #   description: "Invoice Bob for November Rent"
-    #   source_document: InvoiceInstance
-    #   subsidiary_ledger: CustomerAccount
-    #   posting_references do 
-    #     debit(AccountReceivable, amount: amount)
-    #     credit(SalesAccount, amount: amount)
-    #   end
-    # end

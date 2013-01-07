@@ -8,6 +8,14 @@ ActiveRecord::Schema.define do
     t.timestamps
   end
 
+  create_table :pacioli_customer_accounts, :force => true do |t|
+    t.integer :customerable_id
+    t.string :customerable_type
+    t.string :name
+
+    t.timestamps
+  end
+
   create_table :pacioli_accounts, :force => true do |t|
     t.references :pacioli_company
     t.string :code
@@ -23,6 +31,10 @@ ActiveRecord::Schema.define do
     t.string :description
     t.references :pacioli_company
     t.decimal :amount, :precision => 20, :scale => 10
+
+    t.datetime :dated
+
+    t.timestamps
   end
 
   create_table :pacioli_transactions, :force => true do |t|
@@ -30,12 +42,18 @@ ActiveRecord::Schema.define do
     t.references :pacioli_account
     t.string :type
     t.decimal :amount, :precision => 20, :scale => 10
+
+    t.datetime :dated
+
+    t.timestamps
   end
 
   create_table :pacioli_posting_rules, :force => true do |t|
     t.references :pacioli_company
     t.string :name
     t.text :rules
+
+    t.timestamps
   end
   
 end

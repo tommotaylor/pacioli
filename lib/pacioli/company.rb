@@ -76,21 +76,5 @@ module Pacioli
         posting_rule
       end
     end
-
-    # create_posting_rule_with_journal_entry :x do
-    #   debit AccountsReceivable 100%
-    #   credit Sales 100%
-    #   record_against_customer CustomerAccount
-    #   with_description Description
-    #   with_source_document SourceDocument
-    # end
-
-    # record_journal_entry do
-    #   type :x
-    #   description: "Invoice Bob for November Rent"
-    #   source_document: InvoiceInstance
-    #   subsidiary_ledger: CustomerAccount
-    # end
-
   end
 end
