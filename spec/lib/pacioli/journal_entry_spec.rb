@@ -90,6 +90,44 @@ describe Pacioli::Account do
 
     context "Against multiple accounts" do
       before(:each) do
+        @company2 = Pacioli::register_company do
+          with_name "Pepsi"
+          add_expense_account name: "Computer Equipment"
+          add_expense_account name: "Fund Balance"
+          add_liability_account name: "Account Payable"
+          add_liability_account name: "Capital Equipment"
+        end
+
+        @company2.create_posting_rule do
+          with_name :purchase_equipment_and_cover_replacements
+          debit "Computer Equipment"
+          credit "Account Payable"
+          debit "Fund Balance"
+          credit "Capital Equipment"
+        end
+
+        @purchase = @company2.record_journal_entry do
+          with_amount 10000.00
+          with_description "Purchase of Computer Equipment"
+          type :purchase_equipment_and_cover_replacements
+        end
+      end
+
+      it "should be balanced" do
+        @purchase.should be_balanced
+      end
+
+      it "should have 2 debit transactions" do
+        @purchase.debits.count.should == 2
+      end
+
+      it "should have 2 credit transactions" do
+        @purchase.credits.count.should == 2
+      end
+    end
+
+    context "Against multiple accounts and a percentage of an amount" do
+      before(:each) do
         @company.create_posting_rule do
           with_name :sale
           debit "Accounts Receivable"
@@ -111,10 +149,6 @@ describe Pacioli::Account do
       it "should create a debit transaction against Accounts Receivable" do
         @sales.debits.map(&:amount).should == [BigDecimal('100.00')]
       end
-    end
-
-    context "Against multiple accounts and a percentage of an amount" do
-
     end
 
   end

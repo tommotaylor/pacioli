@@ -36,8 +36,5 @@ describe Pacioli::Account do
     @posting_rule.should be_balanced
   end
 
-  it "should be whole" do
-    @posting_rule.should be_whole
-  end
 
 end
