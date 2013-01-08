@@ -16,6 +16,7 @@ module Pacioli
 end
 
 require "pacioli/company"
+require "pacioli/customer"
 require "pacioli/account"
 require "pacioli/asset_account"
 require "pacioli/liability_account"

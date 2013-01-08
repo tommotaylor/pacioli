@@ -5,6 +5,7 @@ module Pacioli
     has_many :chart_of_accounts, through: :accounts
     has_many :journal_entries, foreign_key: :pacioli_company_id, dependent: :destroy
     has_many :posting_rules, foreign_key: :pacioli_company_id, dependent: :destroy
+    has_many :customers, foreign_key: :pacioli_company_id, dependent: :destroy
 
     def self.for(company)
       Company.where(companyable_type: company.class.name, companyable_id: company.id).first || Company.create!(companyable_type: company.class.name, companyable_id: company.id)
@@ -74,6 +75,16 @@ module Pacioli
 
         posting_rule.save!
         posting_rule
+      end
+    end
+
+    def register_customer(&block)
+      self.transaction do 
+        customer = Customer.new
+        self.customers << customer
+        customer.instance_eval(&block)
+        customer.save!
+        customer
       end
     end
   end

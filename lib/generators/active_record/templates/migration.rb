@@ -9,6 +9,15 @@ class CreatePacioliTables < ActiveRecord::Migration
       t.timestamps
     end
 
+    create_table :pacioli_customers, :force => true do |t|
+      t.references :pacioli_company
+      t.integer :customerable_id
+      t.string :customerable_type
+      t.string :name
+
+      t.timestamps
+    end
+
     create_table :pacioli_accounts, :force => true do |t|
       t.references :pacioli_company
       t.string :code

@@ -8,7 +8,8 @@ ActiveRecord::Schema.define do
     t.timestamps
   end
 
-  create_table :pacioli_customer_accounts, :force => true do |t|
+  create_table :pacioli_customers, :force => true do |t|
+    t.references :pacioli_company
     t.integer :customerable_id
     t.string :customerable_type
     t.string :name
