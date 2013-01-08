@@ -17,12 +17,16 @@ module Pacioli
 
     def debit(options={})
       account = self.company.accounts.where(name: options[:account]).first
-      self.transactions << Debit.new(journal_entry: self, account: account, amount: options[:amount])
+      debit = Debit.new(journal_entry: self, account: account, amount: options[:amount])
+      debit.customer = options[:against_customer] if options.has_key? :against_customer
+      self.transactions << debit
     end
 
     def credit(options={})
       account = self.company.accounts.where(name: options[:account]).first
-      self.transactions << Credit.new(journal_entry: self, account: account, amount: options[:amount])
+      credit = Credit.new(journal_entry: self, account: account, amount: options[:amount])
+      credit.customer = options[:against_customer] if options.has_key? :against_customer
+      self.transactions << credit
     end
 
     def balanced?

@@ -150,5 +150,43 @@ describe Pacioli::Account do
         @sales.debits.map(&:amount).should == [BigDecimal('100.00')]
       end
     end
+
+    context "Recording against a customer" do
+      before(:each) do
+        @customer = @company.register_customer do
+          with_name "Leonardo da Vinci"
+        end
+      end
+
+      context "Normal transactions where customer is invoiced" do
+        before(:each) do
+          customer = @customer
+
+          @company.record_journal_entry do
+            with_description "Invoice 123 for November Rent"
+            debit account: "Accounts Receivable", amount: 4500.00, against_customer: customer
+            credit account: "Sales", amount: 4500.00
+          end
+        end
+
+        it "should have a balance of 4500.00" do
+          @customer.balance.should == 4500.00
+        end
+
+        context "Customer makes a payment against the invoice" do
+          before(:each) do
+            @company.record_journal_entry do
+              with_description "Invoice 123 for November Rent"
+              debit account: "Accounts Receivable", amount: 4500.00, against_customer: @customer
+              credit account: "Sales", amount: 4500.00
+            end
+          end          
+        end
+      end
+
+      context "Transactions using posting rules" do
+
+      end
+    end
   end  
 end

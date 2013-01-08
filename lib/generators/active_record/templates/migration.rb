@@ -33,13 +33,21 @@ class CreatePacioliTables < ActiveRecord::Migration
       t.string :description
       t.references :pacioli_company
       t.decimal :amount, :precision => 20, :scale => 10
+
+      t.datetime :dated
+      t.timestamps
     end
 
     create_table :pacioli_transactions, :force => true do |t|
       t.references :pacioli_journal_entry
       t.references :pacioli_account
+      t.references :pacioli_customer
+
       t.string :type
       t.decimal :amount, :precision => 20, :scale => 10
+
+      t.datetime :dated
+      t.timestamps
     end
 
     create_table :pacioli_posting_rules, :force => true do |t|
