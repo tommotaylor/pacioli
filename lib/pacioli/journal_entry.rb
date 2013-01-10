@@ -66,5 +66,9 @@ module Pacioli
     def source
       source_documentable
     end
+
+    def self.for(source)
+      where(source_documentable_type: source.class.name, source_documentable_id: source.id)
+    end
   end
 end
