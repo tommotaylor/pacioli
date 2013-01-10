@@ -33,6 +33,9 @@ ActiveRecord::Schema.define do
     t.references :pacioli_company
     t.decimal :amount, :precision => 20, :scale => 10
 
+    t.integer :source_documentable_id
+    t.string :source_documentable_type
+
     t.datetime :dated
     t.timestamps
   end

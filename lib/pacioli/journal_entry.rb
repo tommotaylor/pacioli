@@ -2,6 +2,7 @@ module Pacioli
   class JournalEntry < ActiveRecord::Base
     belongs_to :company, foreign_key: :pacioli_company_id
     has_many :transactions, foreign_key: :pacioli_journal_entry_id
+    belongs_to :source_documentable, polymorphic: true
 
     def with_description(desc)
       self.description = desc
@@ -9,6 +10,10 @@ module Pacioli
 
     def with_amount(amt)
       self.amount = amt
+    end
+
+    def with_source_document(source_document)
+      self.source_documentable = source_document
     end
 
     def type(type=nil)
@@ -56,6 +61,10 @@ module Pacioli
       posting_rule.rules[:credits].each do |credit|
         self.credit(account: credit[:account], amount: (self.amount / 100) * credit[:percentage])
       end
+    end
+
+    def source
+      source_documentable
     end
   end
 end

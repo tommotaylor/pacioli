@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Pacioli::VERSION
   gem.authors       = ["Jeffrey van Aswegen"]
   gem.email         = ["jeffmess@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{A double-entry bookkeeping system for Ruby on Rails}
+  gem.summary       = %q{A double-entry bookkeeping system for Ruby on Rails}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)

@@ -9,6 +9,7 @@ describe Pacioli::Account do
     @company = Pacioli::register_company do
       with_name "Coca-Cola"
       add_asset_account name: "Accounts Receivable", code: "100"
+      add_asset_account name: "Cash in Bank", code: "101"
       add_income_account name: "Sales", code: "301"
       add_liability_account name: "Sales Tax", code: "401"
     end
@@ -175,12 +176,18 @@ describe Pacioli::Account do
 
         context "Customer makes a payment against the invoice" do
           before(:each) do
+            customer = @customer
+
             @company.record_journal_entry do
-              with_description "Invoice 123 for November Rent"
-              debit account: "Accounts Receivable", amount: 4500.00, against_customer: @customer
-              credit account: "Sales", amount: 4500.00
+              with_description "PMT Received"
+              debit account: "Cash in Bank", amount: 4500.00
+              credit account: "Accounts Receivable", amount: 4500.00, against_customer: customer
             end
-          end          
+          end
+
+          it "should have a balance of 0.00" do
+            @customer.balance.should == 0.00
+          end
         end
       end
 
