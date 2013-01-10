@@ -21,5 +21,21 @@ module Pacioli
     def expense?
       false
     end
+
+    def debits
+      transactions.where(type: 'Pacioli::Debit')
+    end
+
+    def credits
+      transactions.where(type: 'Pacioli::Credit')
+    end
+
+    def balanced?
+      debits.sum(&:amount) == credits.sum(&:amount)
+    end
+
+    def balance
+      debits.sum(&:amount) - credits.sum(&:amount)
+    end
   end
 end

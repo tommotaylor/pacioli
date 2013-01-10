@@ -43,6 +43,34 @@ describe Pacioli::Account do
     it "should record the amount of 4500.00 for the journal entry" do
       Pacioli::JournalEntry.last.amount.should == 4500.00 
     end
+
+    context "Account balances for Accounts Receivable" do
+      before(:each) do
+        @ar =  @company.accounts.where(name: "Accounts Receivable").first
+      end
+
+      it "should have a balance of 4500.00" do
+        @ar.balance.should == 4500.00
+      end
+
+      it "should not be balanced" do
+        @ar.should_not be_balanced
+      end
+    end
+
+    context "Account balances for Sales" do
+      before(:each) do
+        @sales =  @company.accounts.where(name: "Sales").first
+      end
+
+      it "should have a balance of -4500.00" do
+        @sales.balance.should == -4500.00
+      end
+
+      it "should not be balanced" do
+        @sales.should_not be_balanced
+      end
+    end
   end
 
   context "Recording a journal entry where the T-tables do not balance" do
