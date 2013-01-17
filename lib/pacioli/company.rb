@@ -8,7 +8,31 @@ module Pacioli
     has_many :customers, foreign_key: :pacioli_company_id, dependent: :destroy
 
     def self.for(company)
-      Company.where(companyable_type: company.class.name, companyable_id: company.id).first || Company.create!(companyable_type: company.class.name, companyable_id: company.id)
+      Company.where(companyable_type: company.class.name, companyable_id: company.id).first 
+    end
+
+    def asset_accounts
+      self.accounts.select(&:asset?)
+    end
+
+    def liability_accounts
+      self.accounts.select(&:liability?)
+    end
+
+    def expense_accounts
+      self.accounts.select(&:expense?)
+    end
+
+    def income_accounts
+      self.accounts.select(&:income?)
+    end
+
+    def equity_accounts
+      self.accounts.select(&:equity?)
+    end
+
+    def asset_accounts
+      self.accounts.select(&:asset?)
     end
 
     def with_name(company_name)

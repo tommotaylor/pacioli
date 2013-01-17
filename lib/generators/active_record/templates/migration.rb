@@ -37,7 +37,7 @@ class CreatePacioliTables < ActiveRecord::Migration
       t.integer :source_documentable_id
       t.string :source_documentable_type
 
-      t.datetime :dated
+      t.datetime :dated, default: Time.now
       t.timestamps
     end
 
@@ -49,7 +49,7 @@ class CreatePacioliTables < ActiveRecord::Migration
       t.string :type
       t.decimal :amount, :precision => 20, :scale => 10
 
-      t.datetime :dated
+      t.datetime :dated, default: Time.now
       t.timestamps
     end
 

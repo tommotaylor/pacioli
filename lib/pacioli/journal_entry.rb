@@ -16,20 +16,24 @@ module Pacioli
       self.source_documentable = source_document
     end
 
+    def with_date(time=Time.now)
+      self.dated = time
+    end
+
     def type(type=nil)
       self.journal_type = type
     end
 
     def debit(options={})
       account = self.company.accounts.where(name: options[:account]).first
-      debit = Debit.new(journal_entry: self, account: account, amount: options[:amount])
+      debit = Debit.new(journal_entry: self, account: account, amount: options[:amount], dated: self.dated)
       debit.customer = options[:against_customer] if options.has_key? :against_customer
       self.transactions << debit
     end
 
     def credit(options={})
       account = self.company.accounts.where(name: options[:account]).first
-      credit = Credit.new(journal_entry: self, account: account, amount: options[:amount])
+      credit = Credit.new(journal_entry: self, account: account, amount: options[:amount], dated: self.dated)
       credit.customer = options[:against_customer] if options.has_key? :against_customer
       self.transactions << credit
     end

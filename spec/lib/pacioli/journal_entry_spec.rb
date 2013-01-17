@@ -19,6 +19,7 @@ describe Pacioli::Account do
     before(:each) do
       @company.record_journal_entry do
         with_description "Invoice 123 for November Rent"
+        with_date Date.yesterday
         debit account: "Accounts Receivable", amount: 4500.00
         credit account: "Sales", amount: 4500.00
       end
