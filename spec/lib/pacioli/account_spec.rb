@@ -38,6 +38,14 @@ describe Pacioli::Account do
       account.should be_income
     end
 
+    it "should raise an error when trying to add multiple accounts with the same name" do
+      @company.add_income_account name: "Sales"
+      lambda {
+        @company.add_income_account name: "Sales"
+      }.should raise_error(Pacioli::CompanyAccountException, "The company has multiple accounts with the same name: 'Sales' already exists")
+      
+    end
+
   end
   
 end

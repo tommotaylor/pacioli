@@ -43,34 +43,30 @@ module Pacioli
       self.companyable = companyable_object
     end
 
-    def add_asset_account(options={})
-      account = AssetAccount.create!(options)
+    def add_account(account)
       self.accounts << account
+      CompanyValidator.for(self).execute
       account
+    end
+
+    def add_asset_account(options={})
+      add_account AssetAccount.new(options)
     end
 
     def add_equity_account(options={})
-      account = EquityAccount.create!(options)
-      self.accounts << account
-      account
+      add_account EquityAccount.new(options)
     end
 
     def add_liability_account(options={})
-      account = LiabilityAccount.create!(options)
-      self.accounts << account
-      account
+      add_account LiabilityAccount.new(options)
     end
 
     def add_income_account(options={})
-      account = IncomeAccount.create!(options)
-      self.accounts << account
-      account
+      add_account IncomeAccount.new(options)
     end
 
     def add_expense_account(options={})
-      account = ExpenseAccount.create!(options)
-      self.accounts << account
-      account
+      add_account ExpenseAccount.new(options)
     end
 
     def record_journal_entry(&block)
