@@ -95,13 +95,15 @@ describe Pacioli::Account do
         debit account: "Accounts Receivable", amount: 4500.00
         credit account: "Sales", amount: 4500.00
       end
-    end
 
-    it "should be able affect other accounts with an existing journal entry" do
-      @journal_entry.record do
+      @journal_entry = @journal_entry.record do
         credit account: "Sales Tax", amount: 100.0
         debit account: "Accounts Receivable", amount: 100.0
       end
+    end
+
+    it "should be able affect other accounts with an existing journal entry" do
+      @journal_entry.transactions.map(&:account).map(&:name).should == ["Accounts Receivable", "Sales", "Sales Tax", "Accounts Receivable"]
     end
   end
 
