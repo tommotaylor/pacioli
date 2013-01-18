@@ -71,6 +71,25 @@ module Pacioli
       source_documentable
     end
 
+    # record
+    # Could be used to update a journal entry and affect other accounts
+    # eg. a payment into our bank would result in a journal entry but 
+    # we may not know where it came from. At a later stage we could allocate
+    # the payment to a customer/invoice etc.
+
+    def record(&block)
+      self.transaction do
+        self.instance_eval(&block)
+
+        self.execute_posting_rules
+
+        JournalEntryValidator.for(self).execute
+
+        self.save!
+        self
+      end
+    end
+
     def self.for(source)
       where(source_documentable_type: source.class.name, source_documentable_id: source.id)
     end

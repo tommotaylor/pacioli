@@ -87,6 +87,24 @@ describe Pacioli::Account do
     end
   end
 
+  context "Recording a journal entry and also updating it at a later stage" do
+    before(:each) do
+      @journal_entry = @company.record_journal_entry do
+        with_description "Invoice 123 for November Rent"
+        with_date Date.yesterday
+        debit account: "Accounts Receivable", amount: 4500.00
+        credit account: "Sales", amount: 4500.00
+      end
+    end
+
+    it "should be able affect other accounts with an existing journal entry" do
+      @journal_entry.record do
+        credit account: "Sales Tax", amount: 100.0
+        debit account: "Accounts Receivable", amount: 100.0
+      end
+    end
+  end
+
   context "Recording specific types of journal entries using posting rules" do
     context "Against 2 accounts" do
       before(:each) do
