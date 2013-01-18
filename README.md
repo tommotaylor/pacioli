@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/jeffmess/pacioli.png)](http://travis-ci.org/jeffmess/pacioli)
+
 # Pacioli
 
 TODO: Write a gem description
