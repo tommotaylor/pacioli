@@ -201,7 +201,7 @@ describe Pacioli::Account do
       end
     end
 
-    context "Recording against a customer" do
+    context "Recording against a customer with a source document" do
       before(:each) do
         @customer = @company.register_customer do
           with_name "Leonardo da Vinci"
@@ -214,6 +214,7 @@ describe Pacioli::Account do
 
           @company.record_journal_entry do
             with_description "Invoice 123 for November Rent"
+            with_source_document customer # source should be the invoice! 
             debit account: "Accounts Receivable", amount: 4500.00, against_customer: customer
             credit account: "Sales", amount: 4500.00
           end
@@ -221,6 +222,11 @@ describe Pacioli::Account do
 
         it "should have a balance of 4500.00" do
           @customer.balance.should == 4500.00
+        end
+
+        it "should have a recorded a debit entry against Accounts Receivable for the source document" do
+          @company.fetch_account("Accounts Receivable").debited_with_source_document?(@customer).should be_true
+          @company.fetch_account("Accounts Receivable").credited_with_source_document?(@customer).should be_false
         end
 
         context "Customer makes a payment against the invoice" do

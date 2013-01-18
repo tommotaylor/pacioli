@@ -11,6 +11,10 @@ module Pacioli
       Company.where(companyable_type: company.class.name, companyable_id: company.id).first 
     end
 
+    def fetch_account(name)
+      self.accounts.for(name).first
+    end
+
     def asset_accounts
       self.accounts.select(&:asset?)
     end
