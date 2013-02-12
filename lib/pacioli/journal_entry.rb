@@ -27,14 +27,14 @@ module Pacioli
     def debit(options={})
       account = self.company.accounts.where(name: options[:account]).first
       debit = Debit.new(journal_entry: self, account: account, amount: options[:amount], dated: self.dated)
-      debit.customer = options[:against_customer] if options.has_key? :against_customer
+      debit.party = options[:against_party] if options.has_key? :against_party
       self.transactions << debit
     end
 
     def credit(options={})
       account = self.company.accounts.where(name: options[:account]).first
       credit = Credit.new(journal_entry: self, account: account, amount: options[:amount], dated: self.dated)
-      credit.customer = options[:against_customer] if options.has_key? :against_customer
+      credit.party = options[:against_party] if options.has_key? :against_party
       self.transactions << credit
     end
 
@@ -75,7 +75,7 @@ module Pacioli
     # Could be used to update a journal entry and affect other accounts
     # eg. a payment into our bank would result in a journal entry but 
     # we may not know where it came from. At a later stage we could allocate
-    # the payment to a customer/invoice etc.
+    # the payment to a debtor/invoice etc.
 
     def record(&block)
       self.transaction do

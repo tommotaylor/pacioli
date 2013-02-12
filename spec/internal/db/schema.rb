@@ -8,10 +8,11 @@ ActiveRecord::Schema.define do
     t.timestamps
   end
 
-  create_table :pacioli_customers, :force => true do |t|
+  create_table :pacioli_parties, :force => true do |t|
     t.references :pacioli_company
-    t.integer :customerable_id
-    t.string :customerable_type
+    t.integer :partyable_id
+    t.string :partyable_type
+    t.string :type
     t.string :name
 
     t.timestamps
@@ -43,7 +44,7 @@ ActiveRecord::Schema.define do
   create_table :pacioli_transactions, :force => true do |t|
     t.references :pacioli_journal_entry
     t.references :pacioli_account
-    t.references :pacioli_customer
+    t.references :pacioli_party
 
     t.string :type
     t.decimal :amount, :precision => 20, :scale => 10

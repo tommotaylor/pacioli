@@ -5,7 +5,7 @@ module Pacioli
     has_many :chart_of_accounts, through: :accounts
     has_many :journal_entries, foreign_key: :pacioli_company_id, dependent: :destroy
     has_many :posting_rules, foreign_key: :pacioli_company_id, dependent: :destroy
-    has_many :customers, foreign_key: :pacioli_company_id, dependent: :destroy
+    has_many :parties, foreign_key: :pacioli_company_id, dependent: :destroy
 
     def self.for(company)
       Company.where(companyable_type: company.class.name, companyable_id: company.id).first 
@@ -102,13 +102,23 @@ module Pacioli
       end
     end
 
-    def register_customer(&block)
+    def register_debtor(&block)
       self.transaction do 
-        customer = Customer.new
-        self.customers << customer
-        customer.instance_eval(&block)
-        customer.save!
-        customer
+        debtor = Debtor.new
+        self.parties << debtor
+        debtor.instance_eval(&block)
+        debtor.save!
+        debtor
+      end
+    end
+
+    def register_creditor(&block)
+      self.transaction do 
+        creditor = Creditor.new
+        self.parties << creditor
+        creditor.instance_eval(&block)
+        creditor.save!
+        creditor
       end
     end
   end

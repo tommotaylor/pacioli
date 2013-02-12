@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Pacioli::Customer do 
+describe Pacioli::Creditor do 
   include Helpers
 
   before(:each) do
@@ -10,13 +10,13 @@ describe Pacioli::Customer do
       with_name "Coca-Cola"
     end
 
-    @customer = @company.register_customer do
+    @customer = @company.register_creditor do
       with_name "Leonardo da Vinci"
     end
   end
 
-  it "should create a customer" do
-    Pacioli::Customer.all.count.should == 1
+  it "should create a creditor" do
+    Pacioli::Creditor.all.count.should == 1
     @customer.name.should == "Leonardo da Vinci"
     @customer.company.should == @company
   end

@@ -203,7 +203,7 @@ describe Pacioli::Account do
 
     context "Recording against a customer with a source document" do
       before(:each) do
-        @customer = @company.register_customer do
+        @customer = @company.register_debtor do
           with_name "Leonardo da Vinci"
         end
       end
@@ -215,7 +215,7 @@ describe Pacioli::Account do
           @company.record_journal_entry do
             with_description "Invoice 123 for November Rent"
             with_source_document customer # source should be the invoice! 
-            debit account: "Accounts Receivable", amount: 4500.00, against_customer: customer
+            debit account: "Accounts Receivable", amount: 4500.00, against_party: customer
             credit account: "Sales", amount: 4500.00
           end
         end
@@ -236,7 +236,7 @@ describe Pacioli::Account do
             @company.record_journal_entry do
               with_description "PMT Received"
               debit account: "Cash in Bank", amount: 4500.00
-              credit account: "Accounts Receivable", amount: 4500.00, against_customer: customer
+              credit account: "Accounts Receivable", amount: 4500.00, against_party: customer
             end
           end
 
