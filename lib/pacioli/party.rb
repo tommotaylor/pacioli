@@ -27,5 +27,23 @@ module Pacioli
     def balance
       debits.sum(&:amount) - credits.sum(&:amount)
     end
+
+    def balance_at(date=Time.now)
+      debits.before(date).sum(&:amount) - credits.before(date).sum(&:amount)
+    end
+
+    def statement_between_dates(start_date, end_date=Time.now)
+      start_date ||= (Date.today - 1.month).to_time
+
+      temp_array = []
+
+      temp_array << {description: "Opening Balance", date: start_date, credit_amount: "", debit_amount: "", balance: balance_at(start_date)}
+
+      temp_array << transactions.between(start_date, end_date).map(&:to_hash)
+
+      temp_array << {description: "Closing Balance", date: end_date, credit_amount: "", debit_amount: "", balance: balance_at(end_date)}
+
+      temp_array.flatten
+    end
   end
 end
