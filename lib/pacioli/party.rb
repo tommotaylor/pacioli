@@ -5,7 +5,7 @@ module Pacioli
     has_many :transactions, foreign_key: :pacioli_party_id
 
     def self.for(party)
-      Party.where(partyable_type: party.class.name, partyable_id: party.id).first || Party.create!(partyable_type: party.class.name, partyable_id: party.id)
+      Party.where(partyable_type: party.class.name, partyable_id: party.id).first #|| Party.create!(partyable_type: party.class.name, partyable_id: party.id)
     end
 
     def with_name(party_name)
