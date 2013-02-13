@@ -21,6 +21,7 @@ describe Pacioli::Party do
   end
 
   it "should create a debtor" do
+    @company.debtors.count.should == 1
     Pacioli::Debtor.all.count.should == 1
     @debtor.name.should == "Leonardo da Vinci"
     @debtor.company.should == @company

@@ -7,6 +7,9 @@ module Pacioli
     has_many :posting_rules, foreign_key: :pacioli_company_id, dependent: :destroy
     has_many :parties, foreign_key: :pacioli_company_id, dependent: :destroy
 
+    has_many :debtors, foreign_key: :pacioli_company_id, dependent: :destroy
+    has_many :creditors, foreign_key: :pacioli_company_id, dependent: :destroy
+
     def self.for(company)
       Company.where(companyable_type: company.class.name, companyable_id: company.id).first 
     end
