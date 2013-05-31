@@ -61,5 +61,15 @@ module Pacioli
       temp_array.flatten
     end
 
+    def age_analysis_report
+      [
+        {description: "Present", date: Date.today, balance: balance_at(Date.today)},
+        {description: "30 Days", date: Date.today - 30.days, balance: balance_at(Date.today - 30.days)},
+        {description: "60 Days", date: Date.today - 60.days, balance: balance_at(Date.today - 60.days)},
+        {description: "90 Days", date: Date.today - 90.days, balance: balance_at(Date.today - 90.days)},
+        {description: "120 Days", date: Date.today - 120.days, balance: balance_at(Date.today - 120.days)}
+      ]
+    end
+
   end
 end
