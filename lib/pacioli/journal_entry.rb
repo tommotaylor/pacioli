@@ -93,5 +93,35 @@ module Pacioli
     def self.for(source)
       where(source_documentable_type: source.class.name, source_documentable_id: source.id)
     end
+
+    def pretty
+      strings = ["".center(101, "-")]
+      strings << "| Description".ljust(30, " ") + "| #{description}".ljust(70, " ") + "|"
+      strings << "| Amount".ljust(30, " ") + "| #{amount}".ljust(70, " ") + "|"
+      strings << "| Dated".ljust(30, " ") + "| #{dated}".ljust(70, " ") + "|"
+      strings << "| Source Document".ljust(30, " ") + "| #{source_documentable_type} with id: #{source_documentable_id}".ljust(70, " ") + "|"
+      strings << "".center(101, "-")
+      strings << ""
+
+      transactions.map do |transaction|
+        strings << "(#{transaction.account.code}) #{transaction.account.name}".center(101, "-")
+        if transaction.party.nil?
+          party_name = ""
+        else
+          party_name = "(#{transaction.party.partyable_type}: #{transaction.party.name})"
+        end
+
+        if transaction.debit?
+          item = ( "#{party_name} " + transaction.amount.to_s + " |").rjust(51, " ")
+        else
+          item = ("| ".rjust(52) + transaction.amount.to_s + " #{party_name}")
+        end
+
+        strings << item
+        strings << ""
+      end
+
+      strings.join("\n")
+    end
   end
 end
