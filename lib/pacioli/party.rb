@@ -47,12 +47,18 @@ module Pacioli
       running_balance = balance_at(start_date)
 
       temp_array << transactions.between(start_date, end_date).map do |transaction|
+        if (!transaction.journal_entry.source_documentable.blank?) && (transaction.journal_entry.source_documentable.respond_to?(:to_s))
+          sdd = transaction.journal_entry.source_documentable.to_s
+        else
+          sdd = transaction.journal_entry.description
+        end
+
         if transaction.credit?
           running_balance += transaction.amount
-          {description: transaction.journal_entry.description, date: transaction.dated, credit_amount: transaction.amount, debit_amount: "", balance: running_balance}
+          {description: transaction.journal_entry.description, date: transaction.dated, credit_amount: transaction.amount, debit_amount: "", balance: running_balance, source_document_description: sdd}
         else
           running_balance -= transaction.amount
-          {description: transaction.journal_entry.description, date: transaction.dated, debit_amount: transaction.amount, credit_amount: "", balance: running_balance}
+          {description: transaction.journal_entry.description, date: transaction.dated, debit_amount: transaction.amount, credit_amount: "", balance: running_balance, source_document_description: sdd}
         end
       end
 
