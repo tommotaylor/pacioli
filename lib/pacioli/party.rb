@@ -30,9 +30,9 @@ module Pacioli
 
     def balance_at(date=Time.now, t_id=nil)
       if t_id.nil?
-        debits.before(date).sum(&:amount) - credits.before(date).sum(&:amount)
+        debits.before(date.end_of_day).sum(&:amount) - credits.before(date.end_of_day).sum(&:amount)
       else
-        debits.before(date).sum(&:amount) - credits.before(date).sum(&:amount)
+        debits.before(date.end_of_day).sum(&:amount) - credits.before(date.end_of_day).sum(&:amount)
       end
     end
 
@@ -41,10 +41,13 @@ module Pacioli
 
       temp_array = []
 
-      temp_array << {description: "Opening Balance", date: start_date, credit_amount: "", debit_amount: "", balance: balance_at(start_date)}
+      opening_balance = debits.before(start_date.beginning_of_day).sum(&:amount) - credits.before(start_date.beginning_of_day).sum(&:amount)
+
+      temp_array << {description: "Opening Balance", date: start_date, credit_amount: "", debit_amount: "", balance: opening_balance}
 
       #temp_array << transactions.between(start_date, end_date).map(&:to_hash)
-      running_balance = balance_at(start_date)
+      #running_balance = balance_at(start_date)
+      running_balance = opening_balance
 
       temp_array << transactions.between(start_date, end_date).map do |transaction|
         if (!transaction.journal_entry.source_documentable.blank?) && (transaction.journal_entry.source_documentable.respond_to?(:to_s))

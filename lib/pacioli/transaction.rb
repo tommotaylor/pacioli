@@ -5,7 +5,8 @@ module Pacioli
     belongs_to :party, foreign_key: :pacioli_party_id
 
     def self.before(date=Time.now)
-      where("dated < :q", q: date.to_time.end_of_day)
+      #where("dated < :q", q: date.to_time.end_of_day)
+      where("dated < :q", q: date.to_time)
     end
 
     def self.between(start_date, end_date)
