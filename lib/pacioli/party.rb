@@ -54,10 +54,10 @@ module Pacioli
         end
 
         if transaction.credit?
-          running_balance += transaction.amount
+          running_balance -= transaction.amount
           {description: transaction.journal_entry.description, date: transaction.dated, credit_amount: transaction.amount, debit_amount: "", balance: running_balance, source_document_description: sdd}
         else
-          running_balance -= transaction.amount
+          running_balance += transaction.amount
           {description: transaction.journal_entry.description, date: transaction.dated, debit_amount: transaction.amount, credit_amount: "", balance: running_balance, source_document_description: sdd}
         end
       end
