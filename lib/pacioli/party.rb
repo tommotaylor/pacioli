@@ -17,11 +17,21 @@ module Pacioli
     end
 
     def debits
-      transactions.where(type: 'Pacioli::Debit')
+      #transactions.where(type: 'Pacioli::Debit')
+      transactions.select(&:debit?)
     end
 
     def credits
-      transactions.where(type: 'Pacioli::Credit')
+      #transactions.where(type: 'Pacioli::Credit')
+      transactions.select(&:credit?)
+    end
+
+    def debits_before(date)
+      debits.select {|debit| debit.dated < date}
+    end
+
+    def credits_before(date)
+      credits.select {|credit| credit.dated < date}
     end
 
     def balance
@@ -30,9 +40,9 @@ module Pacioli
 
     def balance_at(date=Time.now, t_id=nil)
       if t_id.nil?
-        debits.before(date.end_of_day).sum(&:amount) - credits.before(date.end_of_day).sum(&:amount)
+        debits_before(date.end_of_day).sum(&:amount) - credits_before(date.end_of_day).sum(&:amount)
       else
-        debits.before(date.end_of_day).sum(&:amount) - credits.before(date.end_of_day).sum(&:amount)
+        debits_before(date.end_of_day).sum(&:amount) - credits_before(date.end_of_day).sum(&:amount)
       end
     end
 
@@ -41,7 +51,7 @@ module Pacioli
 
       temp_array = []
 
-      opening_balance = debits.before(start_date.beginning_of_day).sum(&:amount) - credits.before(start_date.beginning_of_day).sum(&:amount)
+      opening_balance = debits_before(start_date.beginning_of_day).sum(&:amount) - credits_before(start_date.beginning_of_day).sum(&:amount)
 
       temp_array << {description: "Opening Balance", date: start_date, credit_amount: "", debit_amount: "", balance: opening_balance}
 
