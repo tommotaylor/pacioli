@@ -11,7 +11,7 @@ module Pacioli
     has_many :creditors, foreign_key: :pacioli_company_id, dependent: :destroy
 
     def self.for(company)
-      Company.where(companyable_type: company.class.name, companyable_id: company.id).first 
+      Company.where(companyable_type: company.class.name, companyable_id: company.id).includes(:parties, :accounts).first 
     end
 
     def fetch_account(name)
