@@ -49,7 +49,7 @@ module Pacioli
     end
 
     def self.for(name)
-      where(name: name).includes(:transactions)
+      where(name: name).includes(transactions: [:journal_entry])
     end 
   end
 end
